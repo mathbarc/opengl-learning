@@ -31,6 +31,19 @@ void drawSphere(double r, int lats, int longs) {
     }
 }
 
+void frameBufferResizeCallback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
+
+void processInput(GLFWwindow* window)
+{
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
+        glfwSetWindowShouldClose(window, true);
+    }
+}
+
 int main()
 {
     glfwInit();
@@ -48,11 +61,18 @@ int main()
     }
 
     glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, frameBufferResizeCallback);
+
+    glewInit();
+    glViewport(0, 0, 800,600);
+    glEnable(GL_DEPTH);
 
     while(!glfwWindowShouldClose(window))
     {
+        processInput(window);
+        glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
         glClear(GL_COLOR_BUFFER_BIT);
-        drawSphere(10, 2,2); 
+        drawSphere(10, 0,0); 
 
         glfwSwapBuffers(window);
         glfwPollEvents();
