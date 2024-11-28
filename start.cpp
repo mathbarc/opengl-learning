@@ -5,20 +5,23 @@
 #include <iostream>
 #include <math.h>
 
-void drawSphere(double r, int lats, int longs) {
+void drawSphere(double r, int lats, int longs)
+{
     int i, j;
-    for(i = 0; i <= lats; i++) {
-        double lat0 = M_PI * (-0.5 + (double) (i - 1) / lats);
-        double z0  = sin(lat0);
-        double zr0 =  cos(lat0);
+    for(i = 0; i <= lats; i++)
+    {
+        double lat0 = M_PI * (-0.5 + (double)(i - 1) / lats);
+        double z0 = sin(lat0);
+        double zr0 = cos(lat0);
 
-        double lat1 = M_PI * (-0.5 + (double) i / lats);
+        double lat1 = M_PI * (-0.5 + (double)i / lats);
         double z1 = sin(lat1);
         double zr1 = cos(lat1);
 
         glBegin(GL_QUAD_STRIP);
-        for(j = 0; j <= longs; j++) {
-            double lng = 2 * M_PI * (double) (j - 1) / longs;
+        for(j = 0; j <= longs; j++)
+        {
+            double lng = 2 * M_PI * (double)(j - 1) / longs;
             double x = cos(lng);
             double y = sin(lng);
 
@@ -31,12 +34,12 @@ void drawSphere(double r, int lats, int longs) {
     }
 }
 
-void frameBufferResizeCallback(GLFWwindow* window, int width, int height)
+void frameBufferResizeCallback(GLFWwindow *window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
 
-void processInput(GLFWwindow* window)
+void processInput(GLFWwindow *window)
 {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
@@ -47,15 +50,15 @@ void processInput(GLFWwindow* window)
 int main()
 {
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(800,800, "Test", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(800, 800, "Test", NULL, NULL);
 
     if(window == NULL)
     {
-        std::cout<<"Failed to create window"<<std::endl;
+        std::cout << "Failed to create window" << std::endl;
         glfwTerminate();
         return 1;
     }
@@ -64,7 +67,7 @@ int main()
     glfwSetFramebufferSizeCallback(window, frameBufferResizeCallback);
 
     glewInit();
-    glViewport(0, 0, 800,600);
+    glViewport(0, 0, 800, 600);
     glEnable(GL_DEPTH);
 
     while(!glfwWindowShouldClose(window))
@@ -72,7 +75,7 @@ int main()
         processInput(window);
         glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
         glClear(GL_COLOR_BUFFER_BIT);
-        drawSphere(10, 0,0); 
+        drawSphere(10, 0, 0);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
