@@ -1,10 +1,7 @@
-#include <GL/glew.h>
-#include <GL/glu.h>
+#include <GL/gl.h>
 #include <GLFW/glfw3.h>
-#include <cstddef>
+#include <cmath>
 #include <iostream>
-#include <math.h>
-
 void drawSphere(double r, int lats, int longs)
 {
     int i, j;
@@ -32,51 +29,42 @@ void drawSphere(double r, int lats, int longs)
         glEnd();
     }
 }
-
-void frameBufferResizeCallback(GLFWwindow* window, int width, int height)
+int main(int argc, char** argv)
 {
-    glViewport(0, 0, width, height);
-}
+    GLFWwindow* window;
 
-void processInput(GLFWwindow* window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, true);
+    if (!glfwInit()) {
+        std::cout << "Init error" << std::endl;
+        return -1;
     }
-}
 
-int main()
-{
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    GLFWwindow* window = glfwCreateWindow(800, 800, "Test", NULL, NULL);
-
-    if (window == NULL) {
-        std::cout << "Failed to create window" << std::endl;
+    window = glfwCreateWindow(800, 600, "Teste", nullptr, nullptr);
+    if (!window) {
+        std::cout << "Window creation error" << std::endl;
         glfwTerminate();
-        return 1;
+        return -1;
     }
 
     glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, frameBufferResizeCallback);
-
-    glewInit();
-    glViewport(0, 0, 800, 600);
-    glEnable(GL_DEPTH);
 
     while (!glfwWindowShouldClose(window)) {
-        processInput(window);
-        glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        drawSphere(10, 0, 0);
+        glClearColor(0, 0, 0, 0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glMatrixMode(GL_PROJECTION);
+        // Inicializa sistema de coordenadas de projeção
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
+        glDepthMask(GL_TRUE);
+
+        drawSphere(5, 10, 10);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
     glfwTerminate();
     return 0;
 }
